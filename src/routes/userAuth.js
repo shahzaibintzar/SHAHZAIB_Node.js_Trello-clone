@@ -37,18 +37,20 @@ router.post('/login', async (req, res) => {
             req.body.password,
             user.password 
         )
-        if(!userPassword) {
-            var token = jwt.sign({ id: user._id, admin: false,email:user.email }, process.env.SECRET);
 
-              res.cookie("token", token,{ httpOnly: true });
+        console.log('userPassword', userPassword)
+
+        if(!userPassword){
             return res.status(404).json({message: 'User incorrect Password'});
         }
+            const token = jwt.sign({ id: user._id, admin: false,email:user.email }, process.env.SECRET);
 
-        res.status(201).json({message: 'User successfully logged in'});
+              res.cookie("token", token,{ httpOnly: true });
+            return res.status(404).json({message: 'User Logged In'});
     } catch (error) {
-        
+        res.status(400).json({message: 'Error logging in user', error});
     }
-})
+});
 
 // log out routes API
 
