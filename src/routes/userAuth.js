@@ -84,4 +84,27 @@ router.get('/user/current', async (req, res) => {
     }
 })
 
+
+// current user update your profile API
+
+router.put('/user/current', async (req, res) => {
+    const token = req.cookies.token;
+    if(!token) {
+        return res.status(400).json({message: 'User not logged in'});
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET);
+        const user = await User.findById(decoded.id);
+        user.name = req.body.name;
+        user.email = req.body.email;
+        user.password =  await bcrypt.hash(req.body.password, 10);
+        const updatedUser = await user.save();
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        res.status(400).json({message: 'User not logged in'});
+    }
+})
+
+
 module.exports = router
