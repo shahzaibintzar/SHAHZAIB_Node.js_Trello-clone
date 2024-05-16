@@ -121,4 +121,23 @@ router.put("/updateOneItemById/:id", async (req, res) => {
 });
 
 
+
+// delete one item in Task list
+
+router.delete("/deleteOneItemById/:id", async (req, res) => {
+    try {
+        const taskId = req.params.id;
+        const deleteOneItemData = await Task.findByIdAndDelete(taskId,req.body);
+
+        if (!deleteOneItemData) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+
+        res.status(200).json({ message: 'Task deleted successfully', deleteOneItemData });
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred', error: error.message });
+    }
+});
+
+
 module.exports = router
