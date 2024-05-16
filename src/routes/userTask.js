@@ -99,5 +99,26 @@ router.delete("/deleteTaskById/:id", async (req, res) => {
 });
 
 
+// update one item in Task list
+
+
+router.put("/updateOneItemById/:id", async (req, res) => {
+    try {
+        const taskId = req.params.id;
+        const updatedOneItemTask = (req.body)
+        const updateOneItemData = await Task.findByIdAndUpdate(taskId, updatedOneItemTask, {
+            new: true,
+        });
+
+        if (!updateOneItemData) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+
+        res.status(200).json({ message: 'Task updated successfully', updateOneItemData });
+    } catch (error) {
+        res.status(500).json({ message: 'An error occurred', error: error.message });
+    }
+});
+
 
 module.exports = router
