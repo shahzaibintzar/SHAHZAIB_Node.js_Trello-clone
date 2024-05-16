@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Task = require('../models/userTask') 
 const jwt = require('jsonwebtoken');
-const cookieParser = require("cookie-parser");
 
 // add tasks in authenticate user API
 router.post('/AddTask', async (req, res) => {
@@ -138,6 +137,18 @@ router.delete("/deleteOneItemById/:id", async (req, res) => {
         res.status(500).json({ message: 'An error occurred', error: error.message });
     }
 });
+
+
+router.get('/getsearchtask',async (req,res)=>{
+    try {
+        const searchTask = req.query.search || 'Hamza' ;
+        const getSearchTask = await Task.find({ title : searchTask})
+        res.status(200).json({message: 'task display sucessfully by search ', getSearchTask});
+        } catch (error) {
+        res.status(400).json({error: error.message});
+    }
+})
+
 
 
 module.exports = router
